@@ -568,10 +568,8 @@ void YoloObjectDetector::yolo()
       fps_ = 1./(what_time_is_it_now() - demoTime_);
       demoTime_ = what_time_is_it_now();
 #endif
-      if (viewImage_) {
-        displayInThread(0);
-      }
-      publishInThread();
+      displayInThread(0);
+	publishInThread();
     } else {
       char name[256];
       sprintf(name, "%s_%08d", demoPrefix_, count);
