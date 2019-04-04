@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <!-- Console launch prefix -->
+  <arg name="launch_prefix" default=""/>
+
+  <!-- Config and weights folder. -->
+  <arg name="yolo_weights_path"          default="$(find darknet_ros)/yolo_network_config/weights"/>
+  <arg name="yolo_config_path"           default="$(find darknet_ros)/yolo_network_config/cfg"/>
+  
+  <arg name="camera_info_topic" default="/camera/aligned_depth_to_color/camera_info"/>
+  <arg name="depth_image_topic" default="/camera/aligned_depth_to_color/image_raw"/>
+  <arg name="color_image_topic" default="/camera/color/image_raw"/>
+  <arg name="pose_topic" default="/compass/pose"/>
+  <arg name="pub_color_topic" default="/artifact/color/image_raw"/>
+  <arg name="bounding_boxes_topic" default="/darknet_ros/bounding_boxes"/>
+  <arg name="artifact_topic" default="/artifact/artifact"/>
+
+  <!-- Load parameters -->
+<!--
+  <rosparam command="load" ns="darknet_ros" file="$(find darknet_ros)/config/ros.yaml"/>
+  <rosparam command="load" ns="darknet_ros" file="$(find darknet_ros)/config/yolov3-tiny.yaml"/>
+-->
+
+  <!-- Start darknet and ros wrapper -->
+<!--
+  <node pkg="darknet_ros" type="darknet_ros" name="darknet_ros" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="weights_path"          value="$(arg yolo_weights_path)" />
+    <param name="config_path"           value="$(arg yolo_config_path)" />
+  </node>
+-->
+  <node pkg="darknet_ros" type="locate_artifacts.py" name="locate_artifacts" output="screen" args="$(arg camera_info_topic) $(arg depth_image_topic) $(arg color_image_topic) $(arg pose_topic) $(arg pub_color_topic) $(arg bounding_boxes_topic) $(arg artifact_topic)" />
+
+ <!--<node name="republish" type="republish" pkg="image_transport" output="screen" 	args="compressed in:=/front_camera/image_raw raw out:=/camera/image_raw" /> -->
+</launch>
