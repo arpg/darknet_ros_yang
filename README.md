@@ -9,3 +9,6 @@ Run the following launch files:
  - `locate_artifacts.launch`
  
 To see the `Artifact` message, run `rostopic echo /artifact/artifact`.
+
+### todo 
+In the `locate_artifacts.py`, I considered the vehicle `pose` message, but I didn't really try to receive the messages and perform transformation on the artifact's position. You need to make some changes to do that.
