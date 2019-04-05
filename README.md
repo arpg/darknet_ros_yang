@@ -13,6 +13,7 @@ Run the following launch files:
 NOTE: Must run `yolo-v3` first to ensure that the first color message can be passed to `yolo/darknet_ros` to start the loop.
 ### todo
 A better logic should be used for robustness.
+[Now I set a timer. After `time_threshold` (1 second), if the flag for publishing color image is still `false`, then set it to `true` to continue the loop.]
 
 The settings/config file for darknet_ros is located in `darknet_ros/config/artifact_ros.yaml` or `ros.yaml`.
 
