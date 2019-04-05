@@ -17,6 +17,9 @@ from darknet_ros_msgs.msg import BoundingBox, BoundingBoxes, Artifact
 
 import yaml
 
+import time
+
+
 class LocateArtifact:
     def __init__(self, camera_info_topic, depth_image_topic, color_image_topic, pose_topic, pub_color_topic, bounding_boxes_topic, artifact_topic):
         """
@@ -44,14 +47,18 @@ class LocateArtifact:
         self.pub_color_image = rospy.Publisher(pub_color_topic, msg_Image, queue_size=1)
         
         self.pub_artifact = rospy.Publisher(artifact_topic, Artifact, queue_size=1)
+        
+        # to ensure the color message can be resent after a time threshold
+        self.start = time.time()
+        self.time_threshold = 1 # 5 seconds
             
             
     def callback_depth(self, data):
-        #print ('recieved depth message')
+        print ('recieved depth message')
         self.depth = data
 
     def callback_camera(self, data):
-        #print ('recieved camera message')
+        print ('recieved camera message')
         self.camera_info = data
         
         
@@ -60,15 +67,27 @@ class LocateArtifact:
         #self.pose = data
         
     def callback_color(self, data):
+        print ('recieved color message')
         # record the depth, pose, color data with the 'same' timestamp
         if self.depth is None:
+            print ('depth is None')
             return
         
+        #print (self.can_publish_color)
+            
+        if not self.can_publish_color:
+            end = time.time()
+            if (end - self.start) > self.time_threshold:
+                self.can_publish_color = True
+                
         if self.can_publish_color:
             self.pub_color_image.publish(data)
             self.can_publish_color = False
             self.depth_keep = self.depth
             #self.pose_keep = self.pose
+            
+            self.start = time.time()
+            print ('published color message')
         
         
     def callback_boundingbox(self, data):
