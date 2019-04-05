@@ -10,6 +10,10 @@ Run the following launch files:
  - `artifact_yolo_v3-tiny.launch`
  - `locate_artifacts.launch`
 
+NOTE: Must run `yolo-v3` first to ensure that the first color message can be passed to `yolo/darknet_ros` to start the loop.
+### todo
+A better logic should be used for robustness.
+
 The settings/config file for darknet_ros is located in `darknet_ros/config/artifact_ros.yaml` or `ros.yaml`.
 
 To see the `Artifact` message, run `rostopic echo /artifact/artifact`.
