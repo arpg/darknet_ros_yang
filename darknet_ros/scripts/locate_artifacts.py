@@ -105,8 +105,9 @@ class LocateArtifact:
         for box in data.bounding_boxes:
             # get the center of the box
             object_type = box.Class
-            if object_type == 'person':
-                object_type = 'survivor'
+            if object_type == 'none':
+                continue
+                
             prob = box.probability
             u = int( (box.xmin + box.xmax)/2 )
             v = int( (box.ymin + box.ymax)/2 )
