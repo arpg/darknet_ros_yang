@@ -9,7 +9,9 @@ The ROS graph kind of explains itself. To make it work correctly, you need to ma
 Run the following launch files:
  - `artifact_yolo_v3-tiny.launch`
  - `locate_artifacts.launch`
- 
+
+The settings/config file for darknet_ros is located in `darknet_ros/config/artifact_ros.yaml` or `ros.yaml`.
+
 To see the `Artifact` message, run `rostopic echo /artifact/artifact`.
 
 ### todo 
