@@ -3,12 +3,12 @@ yolo_model:
   config_file:
     name: yolov3-tiny-subT.cfg
   weight_file:
-    name: yolov3-tiny-subT_14200.weights
+    name: yolov3-tiny-subT.weights
   threshold:
     value: 0.3
   detection_classes:
     names:
-      - survivor
+      - Survivor
       - none
       - none
       - none
@@ -32,22 +32,24 @@ yolo_model:
       - none
       - none
       - none
-      - backpack
+      - Backpack
+      - Drill
       - none
       - none
+      - Backpack
       - none
-      - backpack
       - none
       - none
       - none
       - none
       - none
       - none
+      - Drill
       - none
       - none
+      - Fire Extinguisher
       - none
       - none
-      - fire extinguisher
       - none
       - none
       - none
@@ -69,13 +71,13 @@ yolo_model:
       - none
       - none
       - none
+      - Cell Phone
+      - Cell Phone
       - none
       - none
-      - phone
-      - phone
+      - Cell Phone
       - none
       - none
-      - phone
       - none
       - none
       - none
@@ -86,7 +88,5 @@ yolo_model:
       - none
       - none
       - none
-      - none
-      - none
-      - drill
-      - fire extinguisher
+      - Drill
+      - Fire Extinguisher
