@@ -4,6 +4,8 @@
  *  Created on: Dec 19, 2016
  *      Author: Marko Bjelonic
  *   Institute: ETH Zurich, Robotic Systems Lab
+ *
+ * WITH PATCH //patch/duplicate_bounding_boxes: https://github.com/leggedrobotics/darknet_ros/issues/150
  */
 
 // yolo object detector
@@ -11,6 +13,9 @@
 
 // Check for xServer
 #include <X11/Xlib.h>
+
+//patch/duplicate_bounding_boxes
+#define UNIQUE_FRAMES
 
 #ifdef DARKNET_FILE_PATH
 std::string darknetFilePath_ = DARKNET_FILE_PATH;
@@ -326,6 +331,15 @@ detection *YoloObjectDetector::avgPredictions(network *net, int *nboxes)
 
 void *YoloObjectDetector::detectInThread()
 {
+  //patch/duplicate_bounding_boxes
+#ifdef UNIQUE_FRAMES
+  static int prevSeq;
+  if (prevSeq==headerBuff_[(buffIndex_ + 2) % 3].seq) {
+      return 0;
+  }
+  prevSeq = headerBuff_[(buffIndex_ + 2) % 3].seq;
+#endif
+
   running_ = 1;
   float nms = .4;
 
@@ -421,6 +435,15 @@ void *YoloObjectDetector::fetchInThread()
 
 void *YoloObjectDetector::displayInThread(void *ptr)
 {
+  //patch/duplicate_bounding_boxes
+#ifdef UNIQUE_FRAMES
+  static int prevSeq;
+  if (prevSeq==headerBuff_[(buffIndex_ + 1)%3].seq) {
+      return 0;
+  }
+  prevSeq = headerBuff_[(buffIndex_ + 1)%3].seq;
+#endif
+
   show_image_cv(buff_[(buffIndex_ + 1)%3], "YOLO V3", ipl_, viewImage_);
   int c = cvWaitKey(waitKeyDelay_);
   if (c != -1) c = c%256;
@@ -534,9 +557,20 @@ void YoloObjectDetector::yolo()
     fetch_thread = std::thread(&YoloObjectDetector::fetchInThread, this);
     detect_thread = std::thread(&YoloObjectDetector::detectInThread, this);
     if (!demoPrefix_) {
+#ifdef UNIQUE_FRAMES
+      static int prevSeq;
+      if (prevSeq!=headerBuff_[buffIndex_].seq) {
+          fps_ = 1./(what_time_is_it_now() - demoTime_);
+          demoTime_ = what_time_is_it_now();
+          prevSeq = headerBuff_[buffIndex_].seq;
+      }
+#else
       fps_ = 1./(what_time_is_it_now() - demoTime_);
       demoTime_ = what_time_is_it_now();
-      displayInThread(0);
+#endif
+      if (viewImage_) {
+        displayInThread(0);
+      }
       publishInThread();
     } else {
       char name[256];
@@ -575,6 +609,15 @@ bool YoloObjectDetector::isNodeRunning(void)
 
 void *YoloObjectDetector::publishInThread()
 {
+  //patch/duplicate_bounding_boxes
+#ifdef UNIQUE_FRAMES
+  static int prevSeq;
+  if (prevSeq==headerBuff_[(buffIndex_ + 1)%3].seq) {
+      return 0;
+  }
+  prevSeq = headerBuff_[(buffIndex_ + 1)%3].seq;
+#endif
+
   // Publish image.
   cv::Mat cvImage = cv::cvarrToMat(ipl_);
   if (!publishDetectionImage(cv::Mat(cvImage))) {
