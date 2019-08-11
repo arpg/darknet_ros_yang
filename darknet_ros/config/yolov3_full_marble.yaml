@@ -1,0 +1,16 @@
+yolo_model:
+
+  config_file:
+    name: yolov3-subT_5kperson_subtCU.cfg
+  weight_file:
+    name: yolov3-subT_2000.weights
+  threshold:
+    value: 0.3
+  detection_classes:
+    names:
+      - person
+      - backpack
+      - cell phone
+      - drill
+      - fire_extinguisher
+

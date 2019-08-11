@@ -1,0 +1,15 @@
+yolo_model:
+
+  config_file:
+    name: yolov3_tiny_marble2.cfg
+  weight_file:
+    name: yolov3_tiny_marble_79700.weights
+  threshold:
+    value: 0.1
+  detection_classes:
+    names:
+      - person
+      - backpack
+      - cellphone
+      - drill
+      - extinguisher
