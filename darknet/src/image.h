@@ -1,6 +1,7 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <float.h>
