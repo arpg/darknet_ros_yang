@@ -256,6 +256,11 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
                 } else {
                     strcat(labelstr, ", ");
                     strcat(labelstr, names[j]);
+                    strcat(labelstr, " (");
+                    char prob_buf[10]; 
+                    gcvt(round(dets[i].prob[j]*100), 10, prob_buf);
+                    strcat(labelstr, prob_buf);
+                    strcat(labelstr, ")");
                 }
                 printf("%s: %.0f%%\n", names[j], dets[i].prob[j]*100);
             }
