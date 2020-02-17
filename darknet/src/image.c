@@ -247,6 +247,11 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
             if (dets[i].prob[j] > thresh){
                 if (class < 0) {
                     strcat(labelstr, names[j]);
+                    strcat(labelstr, " (");
+                    char prob_buf[10]; 
+                    gcvt(round(dets[i].prob[j]*100), 10, prob_buf);
+                    strcat(labelstr, prob_buf);
+                    strcat(labelstr, ")");
                     class = j;
                 } else {
                     strcat(labelstr, ", ");

@@ -673,6 +673,11 @@ void *YoloObjectDetector::publishInThread()
     darknet_ros_msgs::CheckForObjectsResult objectsActionResult;
     objectsActionResult.id = buffId_[0];
     objectsActionResult.bounding_boxes = boundingBoxesResults_;
+    cv_bridge::CvImage cv_img;
+    cv_img.header = imageHeader_;
+    cv_img.encoding = sensor_msgs::image_encodings::BGR8;
+    cv_img.image = cvImage;
+    objectsActionResult.detection_image = *(cv_img.toImageMsg());
     checkForObjectsActionServer_->setSucceeded(objectsActionResult, "Send bounding boxes.");
   }
   boundingBoxesResults_.bounding_boxes.clear();

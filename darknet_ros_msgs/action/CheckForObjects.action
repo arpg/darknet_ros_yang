@@ -8,6 +8,7 @@ sensor_msgs/Image image
 # Result definition
 int16 id
 darknet_ros_msgs/BoundingBoxes bounding_boxes
+sensor_msgs/Image detection_image
 
 ---
 # Feedback definition
